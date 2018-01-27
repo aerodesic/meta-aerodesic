@@ -5,7 +5,8 @@ SECTION = "libs"
 LICENSE = "WXwindows"
 LIC_FILES_CHKSUM = "file://docs/licence.txt;md5=18346072db6eb834b6edbd2cdc4f109b"
 
-DEPENDS = "webkitgtk gstreamer1.0 gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
+DEPENDS = "webkitgtk gstreamer gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
+# DEPENDS = "gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/wxwindows/wxWidgets-${PV}.tar.bz2"
 SRC_URI[md5sum] = "e98c5f92805493f150656403ffef3bb0"
@@ -16,14 +17,16 @@ S = "${WORKDIR}/wxWidgets-${PV}"
 inherit autotools-brokensep pkgconfig binconfig
 
 EXTRA_AUTORECONF = " -I ${S}/build/aclocal"
-EXTRA_OECONF = "  --with-opengl \
-                 --without-sdl \
-                 --enable-mediactrl=yes \
-                 --enable-webviewwebkit=yes \
-                 --disable-gpe \
-                 --disable-visibility \
-                 --disable-rpath \
-               "
+EXTRA_OECONF = " \
+	--with-opengl \
+	--without-sdl \
+	--disable-gpe \
+	--disable-visibility \
+	--disable-rpath \
+	--enable-mediactrl=no \
+	--enable-webviewwebkit=yes \
+    "
+
 
 CXXFLAGS := "${@oe_filter_out('-fvisibility-inlines-hidden', '${CXXFLAGS}', d)}"
 CXXFLAGS += "-std=gnu++11"
