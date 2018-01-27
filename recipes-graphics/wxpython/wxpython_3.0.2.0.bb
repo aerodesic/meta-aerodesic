@@ -21,12 +21,16 @@ CFLAGS += "-std=gnu++11"
 # Enable output on stdout for buildpaths
 export WXDEBUG = "findprogress"
 
+# EXTRA_OECONF_append_raspberrypi3 = "--enable-toolbook"
+
 # remove -L/usr/X11R6/lib hardcodes
 do_configure_prepend() {
 	sed -i -e s:/usr/X11R6/lib::g ${S}/config.py
+	# Change 2_8 compatibility to OFF
+	# sed -i "s/#define WXWIN_COMPATIBILITY_2_8 1/#define WXWIN_COMPATIBILITY_2_8 0/" ${S}/../include/wx/gtk/setup0.h
 }
 
-# G. Oliver <go@aerodesic.com> misplled?
+# G. Oliver <go@aerodesic.com> misplled? (was "do_iinstall_append")
 do_install_append() {
     cp -a ${D}${STAGING_DIR_HOST}/* ${D}
     rm -rf ${D}${STAGING_DIR}	

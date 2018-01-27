@@ -1,11 +1,12 @@
 DESCRIPTION = "wxWidgets is a cross platform application framework utilizing native widgets."
 HOMEPAGE = "http://www.wxwidgets.org"
+SECTION = "libs"
 
 LICENSE = "WXwindows"
 LIC_FILES_CHKSUM = "file://docs/licence.txt;md5=18346072db6eb834b6edbd2cdc4f109b"
 
-# DEPENDS = "webkitgtk gstreamer1.0 gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
-DEPENDS = "gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
+DEPENDS = "webkitgtk gstreamer gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
+# DEPENDS = "gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
 
 SRC_URI = "\
 	https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.0/wxWidgets-3.1.0.tar.bz2 \
@@ -25,6 +26,8 @@ EXTRA_OECONF = " --with-opengl \
                  --disable-gpe \
                  --disable-visibility \
                  --disable-rpath \
+		 --enable-mediactrl=yes \
+		 --enable-webviewwebkit=yes \
                "
 
 # --enable-mediactrl=yes
@@ -41,8 +44,18 @@ do_configure() {
 # wx-config contains entries like this:
 # this_prefix=`check_dirname "/build/v2013.06/build/tmp-angstrom_v2013_06-eglibc/work/cortexa8hf-vfp-neon-angstrom-linux-gnueabi/wxwidgets/2.9.5-r0/wxWidgets-2.9.5"`
 do_install_prepend() {
+	echo STAGING_DIR_HOST='${STAGING_DIR_HOST}'
+	echo STAGING_INCDIR='${STAGING_INCDIR}'
+	echo SYSROOT_DESTDIR='${SYSROOT_DESTDIR}'
+	echo STAGING_DIR_NATIVE='${STAGING_DIR_NATIVE}'
+	echo COMPONENTS_DIR='${COMPONENTS_DIR}'
+	echo STAGING_DIR='${STAGING_DIR}'
+	echo STAGING_LIBDIR='${STAGING_LIBDIR}'
+	echo libdir='${libdir}'
+	echo prefix='${prefix}'
+
+	sed -i -e s:${S}:${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${prefix}:g ${S}/wx-config
 	# sed -i -e s:${S}:${STAGING_DIR_HOST}${prefix}:g ${S}/wx-config
-	sed -i -e s:${S}:${SYSROOT_DESTDIR}${prefix}:g ${S}/wx-config
 }
 
 # wx-config doesn't handle the suffixed libwx_media, xrc, etc, make a compat symlink
@@ -54,17 +67,19 @@ do_install_append() {
 
 SYSROOT_PREPROCESS_FUNCS += "wxwidgets_sysroot_preprocess"
 wxwidgets_sysroot_preprocess () {
-    echo STAGING_DIR_HOST='${STAGING_DIR_HOST}'
-    echo STAGING_INCDIR='${STAGING_INCDIR}'
-    echo SYSROOT_DESTDIR='${SYSROOT_DESTDIR}'
-    echo STAGING_LIBDIR='${STAGING_LIBDIR}'
-    echo libdir='${libdir}'
-    # sed -i -e 's,includedir="/usr/include",includedir="${STAGING_INCDIR}",g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
-    # G. Oliver <go@aerodesic.com> Correct the include path
-    sed -i -e 's,includedir="/usr/include",includedir="${SYSROOT_DESTDIR}${prefix}/include/wx-3.1",g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
-    # sed -i -e 's,libdir="/usr/lib",libdir="${STAGING_LIBDIR}",g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
-    sed -i -e 's,libdir="/usr/lib",libdir="${SYSROOT_DESTDIR}${libdir}",g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
+	echo STAGING_DIR_HOST='${STAGING_DIR_HOST}'
+	echo STAGING_INCDIR='${STAGING_INCDIR}'
+	echo SYSROOT_DESTDIR='${SYSROOT_DESTDIR}'
+	echo STAGING_DIR_NATIVE='${STAGING_DIR_NATIVE}'
+	echo COMPONENTS_DIR='${COMPONENTS_DIR}'
+	echo STAGING_DIR='${STAGING_DIR}'
+	echo STAGING_LIBDIR='${STAGING_LIBDIR}'
+	echo libdir='${libdir}'
+	ls -l ${COMPONENTS_DIR}
+	# G. Oliver <go@aerodesic.com> Correct the include path
+	sed -i -e 's:includedir="/usr/include":includedir="${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${prefix}/include/wx-3.1":g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
+	sed -i -e 's:libdir="/usr/lib":libdir="${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${libdir}":g'                            ${SYSROOT_DESTDIR}${libdir}/wx/config/*
 }
 
-FILES_${PN} += "${bindir} ${libdir}/wx/config"
+FILES_${PN} +=     "${bindir} ${libdir}/wx/config"
 FILES_${PN}-dev += "${libdir}/wx/include ${datadir}/bakefile"

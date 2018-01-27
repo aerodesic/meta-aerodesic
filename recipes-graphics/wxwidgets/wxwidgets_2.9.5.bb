@@ -1,10 +1,10 @@
 DESCRIPTION = "wxWidgets is a cross platform application framework utilizing native widgets."
 HOMEPAGE = "http://www.wxwidgets.org"
+SECTION = "libs"
 
 LICENSE = "WXwindows"
 LIC_FILES_CHKSUM = "file://docs/licence.txt;md5=18346072db6eb834b6edbd2cdc4f109b"
 
-# DEPENDS = "webkit-gtk gstreamer gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
 DEPENDS = "webkitgtk gstreamer1.0 gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/wxwindows/wxWidgets-${PV}.tar.bz2"
