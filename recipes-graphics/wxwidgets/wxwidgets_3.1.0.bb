@@ -5,7 +5,8 @@ SECTION = "libs"
 LICENSE = "WXwindows"
 LIC_FILES_CHKSUM = "file://docs/licence.txt;md5=18346072db6eb834b6edbd2cdc4f109b"
 
-DEPENDS = "webkitgtk gstreamer gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
+# DEPENDS = "webkitgtk gstreamer gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
+DEPENDS = "gstreamer gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
 # DEPENDS = "gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
 
 SRC_URI = "\
@@ -26,8 +27,6 @@ EXTRA_OECONF = " --with-opengl \
                  --disable-gpe \
                  --disable-visibility \
                  --disable-rpath \
-		 --enable-mediactrl=yes \
-		 --enable-webviewwebkit=yes \
                "
 
 # --enable-mediactrl=yes
