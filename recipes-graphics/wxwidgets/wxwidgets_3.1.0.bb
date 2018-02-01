@@ -5,13 +5,16 @@ SECTION = "libs"
 LICENSE = "WXwindows"
 LIC_FILES_CHKSUM = "file://docs/licence.txt;md5=18346072db6eb834b6edbd2cdc4f109b"
 
-DEPENDS = "webkitgtk gstreamer gst-plugins-base gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
-# DEPENDS = "webkitgtk gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
-# DEPENDS = "gtk+ jpeg tiff libpng zlib expat libxinerama libglu libnotify"
+# DEPENDS = "webkitgtk gstreamer gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
+DEPENDS = "gtk+ jpeg tiff libpng zlib expat libxinerama libglu"
 
-SRC_URI = "${SOURCEFORGE_MIRROR}/wxwindows/wxWidgets-${PV}.tar.bz2"
-SRC_URI[md5sum] = "e98c5f92805493f150656403ffef3bb0"
-SRC_URI[sha256sum] = "b74ba96ca537cc5d049d21ec9ab5eb2670406a4aa9f1ea4845ea84a9955a6e02"
+SRC_URI = "\
+	https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.0/wxWidgets-3.1.0.tar.bz2 \
+	file://0001-Modified-makefile-to-produce-correct-symbolic-link-f.patch \
+   "
+
+SRC_URI[md5sum] = "e20c14bb9bf5d4ec0979a3cd7510dece"
+SRC_URI[sha256sum] = "e082460fb6bf14b7dd6e8ac142598d1d3d0b08a7b5ba402fdbf8711da7e66da8"
 
 S = "${WORKDIR}/wxWidgets-${PV}"
 
@@ -23,28 +26,19 @@ EXTRA_OECONF = " \
 	--with-opengl \
 	--without-sdl \
 	--disable-gpe \
+	--disable-visibility \
 	--disable-rpath \
-	--enable-mediactrl \
-	--enable-webviewwebkit \
+	--disable-mediactrl \
+	--disable-webviewwebkit \
     "
 
-#	--with-gtk=2
-#	--disable-gtktest
-#	--disable-html
-#	--disable-visibility
-#	--disable-mediactrl
-#	--disable-webviewwebkit
+# --enable-mediactrl=yes
+# --enable-webviewwebkit=yes
 
 CXXFLAGS := "${@oe_filter_out('-fvisibility-inlines-hidden', '${CXXFLAGS}', d)}"
 CXXFLAGS += "-std=gnu++11"
 
 # Broken autotools :/
-do_configure_prepend() {
-	echo PKG_CONFIG_PATH=${PKG_CONFIG_PATH}
-	# Add symbolic link for accessing webkit stuff
-	ln -sf wx/html ${S}/include/webkit
-}
-
 do_configure() {
 	oe_runconf
 }
@@ -52,28 +46,25 @@ do_configure() {
 # wx-config contains entries like this:
 # this_prefix=`check_dirname "/build/v2013.06/build/tmp-angstrom_v2013_06-eglibc/work/cortexa8hf-vfp-neon-angstrom-linux-gnueabi/wxwidgets/2.9.5-r0/wxWidgets-2.9.5"`
 do_install_prepend() {
-	# sed -i -e s:${S}:${STAGING_DIR_HOST}${prefix}:g ${S}/wx-config
 	sed -i -e s:${S}:${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${prefix}:g ${S}/wx-config
+	# sed -i -e s:${S}:${STAGING_DIR_HOST}${prefix}:g ${S}/wx-config
 }
 
 # wx-config doesn't handle the suffixed libwx_media, xrc, etc, make a compat symlink
 do_install_append() {
-	ls -l 
 	for lib in adv aui core html media propgrid qa ribbon richtext stc webview xrc ; do
-		# Don't link to files that don't exist - webview especially - wxpython gets confused.
 		if [ -e ${D}${libdir}/libwx_gtk2u_$lib-2.9.so.5.0.0 ]; then
-			ln -sf libwx_gtk2u_$lib-2.9.so.5.0.0 ${D}${libdir}/libwx_gtk2u_$lib-2.9.so
+			ln -sf libwx_gtk2u_$lib-3.1.so.5.0.0 ${D}${libdir}/libwx_gtk2u_$lib-3.1.so
 		fi
 	done
 }
 
 SYSROOT_PREPROCESS_FUNCS += "wxwidgets_sysroot_preprocess"
 wxwidgets_sysroot_preprocess () {
-#     sed -i -e 's,includedir="/usr/include",includedir="${STAGING_INCDIR}",g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
-#    sed -i -e 's,libdir="/usr/lib",libdir="${STAGING_LIBDIR}",g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
+	# G. Oliver <go@aerodesic.com> Correct the include path
 	sed -i -e 's:includedir="/usr/include":includedir="${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${prefix}/include/wx-3.1":g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
 	sed -i -e 's:libdir="/usr/lib":libdir="${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${libdir}":g'                            ${SYSROOT_DESTDIR}${libdir}/wx/config/*
 }
 
-FILES_${PN} += "${bindir} ${libdir}/wx/config ${libdir}"
+FILES_${PN} +=     "${bindir} ${libdir}/wx/config"
 FILES_${PN}-dev += "${libdir}/wx/include ${datadir}/bakefile"

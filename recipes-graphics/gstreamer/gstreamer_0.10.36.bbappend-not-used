@@ -1,0 +1,1 @@
+EXTRA_OECONF_append_raspberrypi3 = " --with-package-name=plugins-base"

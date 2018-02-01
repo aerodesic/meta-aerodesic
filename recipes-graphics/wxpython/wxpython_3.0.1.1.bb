@@ -1,29 +1,18 @@
+DESCRIPTION = "wxWidgets is a cross platform application framework utilizing native python."
 HOMEPAGE = "http://www.wxpython.org"
 
 LICENSE = "WXwindows"
 LIC_FILES_CHKSUM = "file://licence/licence.txt;md5=18346072db6eb834b6edbd2cdc4f109b"
 
-DEPENDS = "wxwidgets gstreamer"
+DEPENDS = "wxwidgets"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/wxpython/wxPython-src-${PV}.tar.bz2"
-SRC_URI[md5sum] = "a2a28fe8223391c93bf8788316767c9e"
-SRC_URI[sha256sum] = "1a5b7e771eff467538d0834136188e8a7506a4fe6e85d0a46c40158cdbd4c48c"
+SRC_URI[md5sum] = "f4a4c228a2256c5804ec4996aa683b89"
+SRC_URI[sha256sum] = "d51463fe760e2fc00271678700c216809f9db32a6081a1808bd4b7c884dc0a32"
 
 S = "${WORKDIR}/wxPython-src-${PV}/wxPython"
 
 inherit pkgconfig pythonnative python-dir distutils
-
-EXTRA_OECONF_append_raspberrypi3 = "\
-	--enable-debug_info \
-	--enable-compat28 \
-	--with-gtk \
-	--with-opengl \
-	--disable-mediactrl \
-	--disable-html \
-	--disable-webviewwebkit \
-	--disable-webkit \
-	--disable-webview \
-    "
 
 CFLAGS += "-std=gnu++11"
 CFLAGS += "-I../include -I../src"
@@ -32,15 +21,14 @@ CFLAGS += "`wx-config --cppflags`"
 # Enable output on stdout for buildpaths
 export WXDEBUG = "findprogress"
 
+EXTRA_OECONF_append_raspberrypi3 = "--enable-compat28"
+
 # remove -L/usr/X11R6/lib hardcodes
 do_configure_prepend() {
 	sed -i -e s:/usr/X11R6/lib::g ${S}/config.py
 }
 
-# e.g. ${D}/build/v2013.06/build/tmp-angstrom_v2013_06-eglibc/sysroots/beaglebone/usr/include/wx-2.9/wx/wxPython/pytree.h
-
-# G. Oliver <go@aerodesic.com> misplled?
-# do_iinstall_append() {
+# G. Oliver <go@aerodesic.com> misplled? (was "do_iinstall_append")
 do_install_append() {
     cp -a ${D}${STAGING_DIR_HOST}/* ${D}
     rm -rf ${D}${STAGING_DIR}	
