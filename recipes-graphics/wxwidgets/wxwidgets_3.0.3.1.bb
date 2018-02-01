@@ -52,9 +52,10 @@ do_install_prepend() {
 
 # wx-config doesn't handle the suffixed libwx_media, xrc, etc, make a compat symlink
 do_install_append() {
+	echo TARGET_SYS=${TARGET_SYS}
 	for lib in adv aui core html media propgrid qa ribbon richtext stc webview xrc ; do
-		if [ -e ${D}${libdir}/libwx_gtk2u_$lib-2.9.so.5.0.0 ]; then
-			ln -sf libwx_gtk2u_$lib-3.1.so.5.0.0 ${D}${libdir}/libwx_gtk2u_$lib-3.1.so
+		if [ -e ${D}${libdir}/libwx_gtk2u_$lib-3.0-${TARGET_SYS}.so ]; then
+			ln -sf libwx_gtk2u_$lib-3.0-${TARGET_SYS}.so ${D}${libdir}/libwx_gtk2u_$lib-3.0.so
 		fi
 	done
 }
@@ -62,7 +63,7 @@ do_install_append() {
 SYSROOT_PREPROCESS_FUNCS += "wxwidgets_sysroot_preprocess"
 wxwidgets_sysroot_preprocess () {
 	# G. Oliver <go@aerodesic.com> Correct the include path
-	sed -i -e 's:includedir="/usr/include":includedir="${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${prefix}/include/wx-3.1":g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
+	sed -i -e 's:includedir="/usr/include":includedir="${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${prefix}/include/wx-3.0":g' ${SYSROOT_DESTDIR}${libdir}/wx/config/*
 	sed -i -e 's:libdir="/usr/lib":libdir="${COMPONENTS_DIR}/${PACKAGE_ARCH}/${PN}${libdir}":g'                            ${SYSROOT_DESTDIR}${libdir}/wx/config/*
 }
 
