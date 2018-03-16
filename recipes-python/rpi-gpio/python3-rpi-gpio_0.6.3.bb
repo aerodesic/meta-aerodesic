@@ -7,7 +7,11 @@ LIC_FILES_CHKSUM = "file://LICENCE.txt;md5=9b95630a648966b142f1a0dcea001cb7"
 PYPI_PACKAGE = "RPi.GPIO"
 inherit pypi distutils3
 
-SRC_URI += "file://0001-Remove-nested-functions.patch"
+SRC_URI += " \
+	file://0001-Remove-nested-functions.patch \
+	file://0002-Added-real-time-threads-capability.patch \
+"
+
 SRC_URI[md5sum] = "e4abe1cfb5eacebe53078032256eb837"
 SRC_URI[sha256sum] = "a5fc0eb5e401963b6c0a03650da6b42c4005f02d962b81241d96c98d0a578516"
 
