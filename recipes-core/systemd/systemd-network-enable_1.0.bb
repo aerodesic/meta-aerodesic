@@ -16,9 +16,6 @@ do_install() {
     install -m 0755 -d ${D}${sysconfdir}/systemd/network/
     install -m 0644 ${WORKDIR}/wired.network ${D}${sysconfdir}/systemd/network
     install -m 0644 ${WORKDIR}/wireless.network ${D}${sysconfdir}/systemd/network
-
-    # Install a link to start wpa_supplicant on wlan0
-    ln -sf /lib/systemd/system/wpa_supplicant@.service ${D}{sysconfdir}/systemd/multi-user.target.wants/
 }
 
 FILES_PN="${sysconfdir}/systemd/network/* ${sysconfdir}/systemd/multi-user.target.wants/*"
