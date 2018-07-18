@@ -128,32 +128,6 @@ index 417ab54..ab2dd08 100644
     {NULL, NULL, 0, NULL}
  };
  
-diff --git a/source/py_pwm.c b/source/py_pwm.c
-index 92e6093..f47f0db 100644
---- a/source/py_pwm.c
-+++ b/source/py_pwm.c
-@@ -38,9 +38,11 @@ typedef struct
- static int PWM_init(PWMObject *self, PyObject *args, PyObject *kwds)
- {
-     int channel;
-+    int sync_channel = -1;
-+    int sync_edge = -1;
-     float frequency;
- 
--    if (!PyArg_ParseTuple(args, "if", &channel, &frequency))
-+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "if|ii", &channel, &frequency, &sync_channel, &sync_edge))
-         return -1;
- 
-     // convert channel to gpio
-@@ -66,7 +68,7 @@ static int PWM_init(PWMObject *self, PyObject *args, PyObject *kwds)
-     return 0;
- }
- 
--// python method PWM.start(self, dutycycle)
-+// python method PWM.start(self, dutycycle )
- static PyObject *PWM_start(PWMObject *self, PyObject *args)
- {
-     float dutycycle;
 diff --git a/source/soft_pwm.c b/source/soft_pwm.c
 index 9c1386b..d8e9612 100644
 --- a/source/soft_pwm.c
