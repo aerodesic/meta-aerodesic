@@ -9,9 +9,6 @@ SRC_URI = "\
 	gitsm://github.com/WiringPi/WiringPi-Python.git	\
 "
 
-SRC_URI[md5sum] = "5d73b2c6bd84dec386635cb9d27dc344"
-SRC_URI[sha256sum] = "53bb456ebfb14f703d6ac708bf459dc0566c4c2fe888780a083a61543039a176"
-
 S = "${WORKDIR}/git"
 B = "${S}"
 
