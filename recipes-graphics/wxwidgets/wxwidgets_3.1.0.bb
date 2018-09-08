@@ -35,7 +35,8 @@ EXTRA_OECONF = " \
 # --enable-mediactrl=yes
 # --enable-webviewwebkit=yes
 
-CXXFLAGS := "${@oe_filter_out('-fvisibility-inlines-hidden', '${CXXFLAGS}', d)}"
+# CXXFLAGS := "${@oe_filter_out('-fvisibility-inlines-hidden', '${CXXFLAGS}', d)}"
+CXXFLAGS_remove = "-fvisibility-inlines-hidden"
 CXXFLAGS += "-std=gnu++11"
 
 # Broken autotools :/
