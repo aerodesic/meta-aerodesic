@@ -8,7 +8,7 @@ SRCNAME = "flup"
 PR = "ml0"
 
 SRC_URI = "\
-	http://pypi.python.org/packages/source/f/${SRCNAME}/${SRCNAME}-${PV}.tar.gz	\
+	https://pypi.python.org/packages/source/f/${SRCNAME}/${SRCNAME}-${PV}.tar.gz	\
 "
 
 S = "${WORKDIR}/${SRCNAME}-${PV}"
