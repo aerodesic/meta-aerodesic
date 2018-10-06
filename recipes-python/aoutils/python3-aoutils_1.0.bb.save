@@ -1,0 +1,17 @@
+inherit setuptools3 distutils3
+
+SRCREV = "${AUTOREV}"
+
+require python-aoutils.inc
+
+DEPENDS = " \
+	python3-native			\
+	python3-distutils-extra-native 	\
+	python3-setuptools-native	\
+	intltool-native 		\
+"
+
+RDEPENDS_${PN} = " \
+	python3				\
+"
+
