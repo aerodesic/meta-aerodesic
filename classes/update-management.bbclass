@@ -14,10 +14,11 @@ do_update_management() {
         done
         rm -f updated-debs
     else
-        if [ ! -e updated-debs ]; then
-            mkdir updated-debs
-        fi
-          
+        # Start with a fresh updated folder
+        rm -f updated-debs/*
+        mkdir updated-debs
+
+        # Any file different from the original is copied over.
         for file in tmp/deploy/deb/*/*.deb; do
            if ! cmp $file updated-cache/`basename $file`; then
                cp $file updated-debs/`basename $file`
