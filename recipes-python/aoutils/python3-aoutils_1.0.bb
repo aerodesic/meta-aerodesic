@@ -3,6 +3,11 @@
 #
 inherit distutils3 setuptools3
 
+SRCREV = "${AUTOREV}"
+
+OLD_PV := "${PV}"
+PV = "${OLD_PV}+git${SRCPV}"
+
 require python-aoutils.inc
 
 DEPENDS += " \

@@ -7,20 +7,20 @@
 # 
 do_update_management() {
     if [ ! -d updated-cache ]; then
-        # Create cache and copy deployed debs to it.
+        # Create cache and link deployed debs to it.
         mkdir updated-cache
         for file in tmp/deploy/deb/*/*.deb; do
-            cp $file updated-cache/`basename $file`
+            ln -sf $file updated-cache/`basename $file`
         done
-        rm -f updated-debs
+        rm -rf updated-debs
     else
         # Start with a fresh updated folder
-        rm -f updated-debs/*
+        rm -rf updated-debs
         mkdir updated-debs
 
-        # Any file different from the original is copied over.
+        # Any file that doesn't exist in the original is copied
         for file in tmp/deploy/deb/*/*.deb; do
-           if ! cmp $file updated-cache/`basename $file`; then
+           if [ ! -e updated-cache/`basename $file` ]; then
                cp $file updated-debs/`basename $file`
            fi
         done
