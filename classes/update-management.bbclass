@@ -10,7 +10,7 @@ do_update_management() {
         # Create cache and link deployed debs to it.
         mkdir updated-cache
         for file in tmp/deploy/deb/*/*.deb; do
-            ln -sf $file updated-cache/`basename $file`
+            ln -sf `pwd`/$file updated-cache/`basename $file`
         done
         rm -rf updated-debs
     else
