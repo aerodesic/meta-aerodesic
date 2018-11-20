@@ -1,30 +1,36 @@
 
 # Postprocess the image and collect all debs in tmp/deploy/debs/*/*.deb.
 # Two support directories exist (or are created) to facilitate generation of updates.
-# If 'updated-cache' exists, debs that are different to those in this directory
-# are copied to updated-debs.  If updated-cache does not exist, it is created
+# If ${UPDATE_MANAGEMENT_CACHE} exists, debs that are different to those in this directory
+# are copied to updated-debs.  If ${UPDATE_MANAGEMENT_CACHE}  does not exist, it is created
 # and filled with a copy of the files in the deployed debs dir.
 # 
 do_update_management() {
-    if [ ! -d updated-cache ]; then
+    BUILDDIR=`pwd`
+    echo BUILDDIR=${BUILDDIR}
+    if [ ! -d ${UPDATE_MANAGEMENT_CACHE} ]; then
         # Create cache and link deployed debs to it.
-        mkdir updated-cache
-        for file in tmp/deploy/deb/*/*.deb; do
-            ln -sf `pwd`/$file updated-cache/`basename $file`
+        mkdir ${UPDATE_MANAGEMENT_CACHE}
+        cd ${BUILDDIR}/tmp/deploy/deb
+        for file in */*.deb; do
+            mkdir -p ${UPDATE_MANAGEMENT_CACHE}/$file
+            cp $file ${UPDATE_MANAGEMENT_CACHE}/$file
         done
-        rm -rf updated-debs
+        rm -rf ${BUILDDIR}/updated-debs
     else
         # Start with a fresh updated folder
-        rm -rf updated-debs
-        mkdir updated-debs
+        rm -rf ${BUILDDIR}/updated-debs
+        mkdir ${BUILDDIR}/updated-debs
 
-        # Any file that doesn't exist in the original is copied
-        for file in tmp/deploy/deb/*/*.deb; do
-           if [ ! -e updated-cache/`basename $file` ]; then
-               cp $file updated-debs/`basename $file`
+        # Any file that doesn't exist in the original is copied.
+        cd ${BUILDDIR}/tmp/deploy/deb
+        for file in */*.deb; do
+           if [ ! -e ${UPDATE_MANAGEMENT_CACHE}/$file ]; then
+               cp $file ${BUILDDIR}/updated-debs/`basename $file`
            fi
         done
     fi
+    cd ${BUILDDIR}
 }
 
 IMAGE_POSTPROCESS_COMMAND = "do_update_management"
