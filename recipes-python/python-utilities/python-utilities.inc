@@ -1,5 +1,5 @@
-SUMMARY = "AO Utilities"
-HOMEPAGE = "http://www.ao-cs.com"
+SUMMARY = "Some extra python utilities"
+HOMEPAGE = "http://robosity.com"
 SECTION = "utils"
 LICENSE = "GPLv2"
 PR = "r1"
@@ -14,7 +14,7 @@ DEPENDS = " \
 S = "${WORKDIR}/git"
 
 SRC_URI = " \
-	git://go@repos.ao-cs.com/home/git/aoutils.git;protocol=ssh 	\
+	git://go@repos.ao-cs.com/home/git/python-extra-utilities.git;protocol=ssh 	\
 "
 
 FILES_${PN} = "${libdir}"

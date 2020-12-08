@@ -8,7 +8,7 @@ SRCREV = "${AUTOREV}"
 OLD_PV := "${PV}"
 PV = "${OLD_PV}+git${SRCPV}"
 
-require python-aoutils.inc
+require python-utilities.inc
 
 DEPENDS += " \
 	python-distutils-extra-native 	\
