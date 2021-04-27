@@ -1,20 +1,21 @@
 DESCRIPTION = "A module to control Raspberry Pi GPIO channels (modified for python3)"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 HOMEPAGE = "http://code.google.com/p/raspberry-gpio-python/"
 SECTION = "devel/python"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENCE.txt;md5=9b95630a648966b142f1a0dcea001cb7"
 
-CFLAGS_append = "-fcommon"
+LIC_FILES_CHKSUM = "file://LICENCE.txt;md5=9b95630a648966b142f1a0dcea001cb7"
 
 PYPI_PACKAGE = "RPi.GPIO"
 inherit pypi distutils3
 
+CFLAGS_append = "-fcommon"
+
 SRC_URI += " \
-	file://0001-Remove-nested-functions.patch \
 	file://0002-Added-real-time-threads-capability.patch \
 "
 
-SRC_URI[md5sum] = "e4abe1cfb5eacebe53078032256eb837"
-SRC_URI[sha256sum] = "a5fc0eb5e401963b6c0a03650da6b42c4005f02d962b81241d96c98d0a578516"
+SRC_URI[md5sum] = "777617f9dea9a1680f9af43db0cf150e"
+SRC_URI[sha256sum] = "7424bc6c205466764f30f666c18187a0824077daf20b295c42f08aea2cb87d3f"
 
 COMPATIBLE_MACHINE = "^rpi$"

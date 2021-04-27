@@ -2,12 +2,13 @@ DESCRIPTION = "Random assortment of WSGI servers"
 SECTION = "devel/python"
 PRIORITY = "optional"
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/BSD-2-Clause;md5=8bef8e6712b1be5aa76af1ebde9d6378"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE.txt;md5=7731c23fc0a35391a01f9473e08b01ba"
 
 SRCNAME = "flup"
 PR = "ml0"
 
 SRC_URI = "\
+	file://LICENSE.txt								\
 	https://pypi.python.org/packages/source/f/${SRCNAME}/${SRCNAME}-${PV}.tar.gz	\
 "
 

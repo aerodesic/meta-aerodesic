@@ -1,5 +1,5 @@
-SUMMARY = "Some extra python utilities"
-HOMEPAGE = "http://robosity.com"
+SUMMARY = "Extra python utilities"
+HOMEPAGE = "http://www.aerodesic.com"
 SECTION = "utils"
 LICENSE = "GPLv2"
 PR = "r1"
@@ -14,7 +14,7 @@ DEPENDS = " \
 S = "${WORKDIR}/git"
 
 SRC_URI = " \
-	git://go@repos.ao-cs.com/home/git/python-extra-utilities.git;protocol=ssh 	\
+	git://git@github.com/aerodesic/extra-utils.git;protocol=ssh	\
 "
 
 FILES_${PN} = "${libdir}"

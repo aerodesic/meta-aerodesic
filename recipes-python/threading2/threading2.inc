@@ -3,21 +3,16 @@ SECTION = "python"
 LICENSE = "GPL"
 PR = "r1"
 
-inherit pypi distutils setuptools
-
-DEPENDS = " \
-	python-distutils-extra-native 	\
-	intltool-native 		\
-"
-
-RDEPENDS_${PN} = " \
-	python				\
-"
+inherit pypi
 
 S = "${WORKDIR}/git"
 
 SRC_URI = " \
 	https://github.com/rfk/${PN}.git \
+"
+
+DEPENDS += " \
+	intltool-native 		\
 "
 
 do_install_append() {
