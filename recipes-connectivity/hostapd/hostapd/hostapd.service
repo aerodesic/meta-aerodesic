@@ -1,0 +1,15 @@
+[Unit]
+Description=Hostapd IEEE 802.11 AP, IEEE 802.1X/WPA/WPA2/EAP/RADIUS Authenticator
+# After=network.target
+BindsTo=sys-subsystem-net-devices-wlan0.device
+After=sys-subsystem-net-devices-wlan0.device
+
+[Service]
+Type=forking
+PIDFile=/run/hostapd.pid
+ExecStartPre=@SBINDIR@/hostapd-mac-to-pw.sh wlan0
+ExecStart=@SBINDIR@/hostapd @SYSCONFDIR@/hostapd.conf -P /run/hostapd.pid -B
+
+[Install]
+WantedBy=multi-user.target
+

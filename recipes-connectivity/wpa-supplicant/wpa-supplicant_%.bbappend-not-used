@@ -1,0 +1,18 @@
+# Fetch some files for overriding configuration of default system.
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+# Add a file to muck password into vcoach-<mac suffix>
+SRC_URI += " \
+	file://wpa_supplicant-wlan0.conf		\
+"
+
+do_install_append() {
+
+    install -m 0755 -d ${D}${sysconfdir}/wpa_supplicant
+    install -m 0600 ${WORKDIR}/wpa_supplicant-wlan0.conf ${D}${sysconfdir}/wpa_supplicant/
+}
+
+FILES_${PN} += "${sysconfdir}/wpa_supplicant"
+
+SYSTEMD_AUTO_ENABLE_${PN} = "disable"
+

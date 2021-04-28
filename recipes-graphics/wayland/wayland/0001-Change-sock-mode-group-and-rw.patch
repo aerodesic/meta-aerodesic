@@ -1,0 +1,59 @@
+diff --git a/configure.ac b/configure.ac
+index f05fba4..af1bbac 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -57,6 +57,12 @@ AS_IF([test x"$enable_fatal_warnings" != "xno"], [
+       WERROR_CFLAGS="-Werror"
+ ])
+ 
++
++AC_ARG_VAR([WAYLAND_SOCKET_GROUP], [Set the group ownership of the wayland socket.])
++if test "x$WAYLAND_SOCKET_GROUP" != "x"; then
++  AC_DEFINE_UNQUOTED(WAYLAND_SOCKET_GROUP, ["$WAYLAND_SOCKET_GROUP"], [Set the group ownwership of the wayland socket.])
++fi
++
+ if test "x$GCC" = "xyes"; then
+ 	GCC_CFLAGS="$WERROR_CFLAGS -Wall -Wextra -Wno-unused-parameter -g -Wstrict-prototypes -Wmissing-prototypes -fvisibility=hidden"
+ fi
+diff --git a/src/wayland-server.c b/src/wayland-server.c
+index eae8d2e..90883e4 100644
+--- a/src/wayland-server.c
++++ b/src/wayland-server.c
+@@ -42,11 +42,14 @@
+ #include <fcntl.h>
+ #include <sys/file.h>
+ #include <sys/stat.h>
++#include <sys/types.h>
++#include <grp.h>
+ 
+ #include "wayland-util.h"
+ #include "wayland-private.h"
+ #include "wayland-server.h"
+ #include "wayland-os.h"
++#include "config.h"
+ 
+ /* This is the size of the char array in struct sock_addr_un.
+  * No Wayland socket can be created with a path longer than this,
+@@ -1438,6 +1441,22 @@ _wl_display_add_socket(struct wl_display *display, struct wl_socket *s)
+ 		return -1;
+ 	}
+ 
++
++#ifdef WAYLAND_SOCKET_GROUP
++	struct group *g = getgrnam(WAYLAND_SOCKET_GROUP);
++	if (g != NULL) {
++		if (chown(s->addr.sun_path, -1, g->gr_gid) < 0) {
++			wl_log("chown() failed to change group to %s", WAYLAND_SOCKET_GROUP);
++			return -1;
++		}
++	}
++#endif
++
++	if (chmod(s->addr.sun_path, 0660) < 0) {
++		wl_log("chmod() failed with error: %m\n");
++		return -1;
++	}
++
+ 	if (listen(s->fd, 128) < 0) {
+ 		wl_log("listen() failed with error: %m\n");
+ 		return -1;

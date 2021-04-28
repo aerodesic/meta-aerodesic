@@ -1,0 +1,16 @@
+diff --git a/src/gtk1/settings.cpp b/src/gtk1/settings.cpp
+index f3e00e5..7b7a598 100644
+--- a/src/gtk1/settings.cpp
++++ a/src/gtk1/settings.cpp
+@@ -376,8 +376,8 @@ wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
+         case wxSYS_SCREEN_Y:
+             return gdk_screen_height();
+ 
+-        case wxSYS_HSCROLL_Y:  return 15;
+-        case wxSYS_VSCROLL_X:  return 15;
++        case wxSYS_HSCROLL_Y:  return 30; // Double the height
++        case wxSYS_VSCROLL_X:  return 30; // Double the width
+ 
+ // a gtk1 implementation should be possible too if gtk2 efficiency/convenience functions aren't used
+ #if 0
+

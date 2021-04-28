@@ -1,0 +1,6 @@
+# Create access point ap0 as attached to wlan0 controller and start both.
+SUBSYSTEM=="ieee80211", ACTION=="add|change", KERNEL=="phy0", \
+  RUN+="/usr/sbin/iw phy phy0 interface add ap0 type __ap", \
+  RUN+="/sbin/ip link set ap0 up", \
+  RUN+="/sbin/ifup ap0"
+

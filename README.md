@@ -1,4 +1,4 @@
-# meta-extra-pi-stuff
-#
-# This repository contains extra recipes for RPi yocto builds.
-#
+# meta-aerodesic
+
+This is a collection of useful additions to yocto for building general-purpose distributions.
+

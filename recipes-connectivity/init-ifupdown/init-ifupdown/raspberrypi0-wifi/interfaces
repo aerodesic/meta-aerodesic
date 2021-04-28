@@ -1,0 +1,24 @@
+# This is coming from raspberrypi0-wifi/interfaces
+
+auto lo
+iface lo inet loopback
+
+# These are mutually exclusive - bringing up one will 'down' the other before it comes up.
+allow-hotplug ap0
+iface ap0 inet static
+    address 192.168.0.1
+    network 192.168.0.0
+    netmask 255.255.255.0
+    pre-up ifdown --force wlan0
+    post-up systemctl start hostapd
+    post-up systemctl start dnsmasq
+    pre-down systemctl stop hostapd
+    pre-down systemctl stop hostapd
+
+
+allow-hotplug wlan0
+iface wlan0 inet dhcp
+    pre-up ifdown --force ap0
+    pre-up systemctl start wpa_supplicant@wlan0
+    post-down systemctl stop wpa_supplicant@wlan0
+

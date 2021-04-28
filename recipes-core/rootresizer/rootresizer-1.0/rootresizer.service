@@ -1,0 +1,15 @@
+[Unit]
+Description=Root disk resizer
+DefaultDependencies=no
+Before=local-fs.target
+
+[Service]
+User=root
+Type=oneshot
+ExecStart=/usr/sbin/rootresizer.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target
+
+

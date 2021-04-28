@@ -1,0 +1,39 @@
+DESCRIPTION = "A library to control Raspberry Pi GPIO channels"
+HOMEPAGE = "https://projects.drogon.net/raspberry-pi/wiringpi/"
+SECTION = "devel/libs"
+LICENSE = "LGPLv3+"
+LIC_FILES_CHKSUM = "file://COPYING.LESSER;md5=e6a600fd5e1d9cbde2d983680233ad02"
+
+PR="r1"
+
+# tag 2.46
+SRCREV = "093e0a17a40e064260c1f3233b1ccdf7e4c66690"
+
+S = "${WORKDIR}/git"
+
+SRC_URI = " \
+	git://github.com/WiringPi/wiringpi	\
+	file://0001-Add-initial-cross-compile-support.patch \
+	"
+
+SRC_URI[md5sum] = "15b40d96a28d9dd461a34984c3eae371"
+SRC_URI[sha256sum] = "59b954448133e8011c33322f186512a845f22ffb51a73e6ce4003a26b617de1d"
+
+COMPATIBLE_MACHINE = "^rpi$"
+
+CFLAGS_prepend = "-I${S}/wiringPi -I${S}/devLib "
+
+EXTRA_OEMAKE += "'INCLUDE_DIR=${D}${includedir}' 'LIB_DIR=${D}${libdir}'"
+EXTRA_OEMAKE += "'DESTDIR=${D}/usr' 'PREFIX=""'"
+
+do_compile() {
+    oe_runmake -C devLib
+    oe_runmake -C wiringPi
+    oe_runmake -C gpio 'LDFLAGS=${LDFLAGS} -L${S}/wiringPi -L${S}/devLib'
+}
+
+do_install() {
+    oe_runmake -C devLib install
+    oe_runmake -C wiringPi install
+    oe_runmake -C gpio install
+}

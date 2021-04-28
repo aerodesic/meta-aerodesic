@@ -1,0 +1,8 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+# These patches were borrowed from automotivelinux.org to enable weston running as non-root
+xxxSRC_URI_append = " \
+    file://0001-Change-sock-mode-group-and-rw.patch	\
+"
+
+xxxEXTRA_OECONF_append_rpi = " WAYLAND_SOCKET_GROUP=display"

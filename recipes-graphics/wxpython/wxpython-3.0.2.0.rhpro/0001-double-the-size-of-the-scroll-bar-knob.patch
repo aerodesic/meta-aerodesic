@@ -1,0 +1,14 @@
+diff --git a/src/gtk/settings.cpp b/src/gtk/settings.cpp
+index 0f5f4de..a0f65a1 100644
+--- a/src/gtk/settings.cpp
++++ b/src/gtk/settings.cpp
+@@ -608,7 +608,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
+ 
+         case wxSYS_HSCROLL_Y:
+         case wxSYS_VSCROLL_X:
+-            return 15;
++            return 30; // Return double size scroll handle
+ 
+         case wxSYS_CAPTION_Y:
+             if (!window)
+

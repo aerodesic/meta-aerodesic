@@ -1,0 +1,18 @@
+[Unit]
+Description=Weston Wayland Compositor
+RequiresMountsFor=/run
+Requires=rootresizer.service
+After=rootresizer.service
+Requires=framebuffer.service
+After=framebuffer.service
+
+[Service]
+User=root
+Type=forking
+EnvironmentFile=/run/framebuffer
+EnvironmentFile=/etc/default/weston-systemd
+ExecStart=/usr/bin/weston-start -- $OPTARGS --device=${FRAMEBUFFER_DEVICE}
+
+[Install]
+WantedBy=multi-user.target
+
