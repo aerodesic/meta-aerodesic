@@ -1,5 +1,5 @@
 #
-# Add a Hotspot to the system.
+# Add a an eth1 for USB access.
 #
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac"
@@ -27,13 +27,12 @@ do_install_append() {
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${WORKDIR}/${PN}.service ${D}${systemd_unitdir}/system
 
-
     # Fix up symbolic directories in files
     for file in ${D}${systemd_unitdir}/system/${PN}.service ${D}${sbindir}/${PN}-setup.sh; do 
         sed -i -e 's#@SYSCONFDIR@#${sysconfdir}#g' ${file}
         sed -i -e 's#@SBINDIR@#${sbindir}#g' ${file}
         sed -i -e 's#@BINDIR@#${bindir}#g' ${file}
-        sed -i -e 's#@PROJECT_USER@#${PROJECT_USER}#g' ${file}
+	sed -i -e 's#@USB_ETHERNET_CONNECTIONS@#${USB_ETHERNET_CONNECTIONS}#g' ${file}
     done
 }
 

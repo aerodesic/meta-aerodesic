@@ -1,0 +1,11 @@
+[Unit]
+Description=Create NetworkManager connection for eth1 to be dhcp supplied addresses
+Before=hotspot.service
+
+[Service]
+Type=oneshot
+ExecStart=@SBINDIR@/usb-ethernet-setup.sh @USB_ETHERNET_CONNECTIONS@
+
+[Install]
+WantedBy=multi-user.target
+

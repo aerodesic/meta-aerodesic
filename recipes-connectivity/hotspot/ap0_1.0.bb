@@ -14,9 +14,9 @@ RDEPENDS_${PN} += " bash"
 S = "${WORKDIR}"
 
 SRC_URI += " \
-	file://${PN}-setup.sh		\
+	file://${BPN}-setup.sh		\
 	file://COPYING			\
-	file://${PN}.service		\
+	file://${BPN}.service		\
 "
 
 do_install_append() {
