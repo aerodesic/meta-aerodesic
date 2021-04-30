@@ -1,8 +1,8 @@
 [Unit]
 Description=Weston Wayland Compositor
 RequiresMountsFor=/run
-Requires=rootresizer.service
-After=rootresizer.service
+# Requires=rootresizer.service
+# After=rootresizer.service
 Requires=framebuffer.service
 After=framebuffer.service
 

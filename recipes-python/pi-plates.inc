@@ -28,7 +28,6 @@ RDEPENDS_${PN} += " \
     python3-rpi-gpio                    \
     python3-systemd                     \
     python3-aoutils                     \
-    rootresizer                         \
     bash                                \
 "
 

@@ -53,14 +53,28 @@ def ResizeRoot():
             # Read partition table information
             rc, results = RunCommand(("lsblk", "-J", "-b", device))
             if rc == 0:
-                root_size = None
                 devinfo = json.loads(results)
                 partitions = devinfo["blockdevices"][0]["children"]
-                for part in partitions:
-                    if part["name"] == root_partition_base:
-                        root_size = int(part["size"])
 
-                if root_size != None and root_size < 1500000000:
+                # Compute total partitions used and subtract from size of base.
+                # If remainder is more than 500Mb, resize root partition
+                total_left = devinfo["blockdevices"][0]["size"]
+                # syslog.syslog("Device %s has %d bytes" % (devinfo["blockdevices"][0]["name"], total_left))
+
+                for part in partitions:
+                    total_left -= int(part["size"])
+
+                # syslog.syslog("... Counting all partitions, there are %d bytes left" % (total_left))
+                # root_size = None
+                #
+                # for part in partitions:
+                #     if part["name"] == root_partition_base:
+                #         root_size = int(part["size"])
+                #
+                # if root_size != None and root_size < 1500000000:
+
+                if total_left > 500000000:
+                    # syslog.syslog("... Resizing...")
                     # Need to resize
                     # Mount read-only and check results
                     if os.system("mount -oremount,ro /") == 0:

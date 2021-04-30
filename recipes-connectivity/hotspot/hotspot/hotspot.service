@@ -1,12 +1,14 @@
 [Unit]
 Description=Hotspot install and setup of address/password
-BindsTo=sys-subsystem-net-devices-wlan0.device
-After=sys-subsystem-net-devices-wlan0.device
+BindsTo=NetworkManager.service
+After=NetworkManager.service
 
 [Service]
 Type=oneshot
-ExecStart=@SBINDIR@/hotspot-setup.sh ap0
+ExecStartPre=/usr/bin/nm-online -s
+ExecStart=/usr/sbin/hotspot-setup.sh ap0
 
 [Install]
 WantedBy=multi-user.target
+
 
